@@ -1,0 +1,61 @@
+﻿@page "/"
+@inject GooglePlacesService googlePlacesService
+@rendermode InteractiveServer
+
+<PageTitle>Drinks Finder</PageTitle>
+
+<div class="places-container">
+    <div class="search-form">
+        <div class="form-group">
+            <input class="form-control"
+                   type="text" placeholder="Location as lat,long"
+                   aria-label="Location (Lat, Long)"
+                   @bind="location">
+        </div>
+        <div class="form-group">
+            <input class="form-control"
+                   type="text" placeholder="Drink"
+                   aria-label="Drink"
+                   @bind="drink">
+        </div>
+        <button class="btn btn-outline-success" @onclick="SearchPlaces">Search</button>
+    
+
+    @* @foreach (var place in places)
+    {
+        <div class="place">
+            @place
+        </div>
+
+    } *@
+    </div>
+
+
+<iframe style="background: #F1F5F4;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width: 50vw;height: 50vh;" src="https://charts.mongodb.com/charts-transsupporthub-azpkxot/embed/dashboards?id=66950441-c5db-4f56-8813-56b7854318c8&theme=light&autoRefresh=true&maxDataAge=3600&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"></iframe>
+
+</div>
+
+@code {
+    Place place;
+    List<string> places = new List<string>();
+    string location;
+    string drink;
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+
+    }
+
+    private async Task SearchPlaces()
+    {
+        place = await googlePlacesService.SearchPlacesAsync(drink, location, 3000);
+        places.Clear();
+        foreach (var result in place.results)
+        {
+            places.Add(result.name);
+        }
+    }
+}
+
+
